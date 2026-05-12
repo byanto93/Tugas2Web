@@ -1,0 +1,124 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Tracking DO</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <div id="app" class="container">
+      <h1>
+        <i class="fa-solid fa-truck-fast"></i>
+        Tracking Delivery Order
+      </h1>
+      <button @click="showForm = !showForm">Tambah Delivery Order</button>
+
+      <br /><br />
+      <div v-if="selectedPaket">
+        <p><b>Isi Paket:</b></p>
+
+        <ul>
+          <li v-for="isi in selectedPaket.isi">{{ isi }}</li>
+        </ul>
+      </div>
+
+      <div v-if="showForm">
+        <input type="text" v-model="form.nim" placeholder="NIM" />
+
+        <input type="text" v-model="form.nama" placeholder="Nama" />
+
+        <select v-model="form.ekspedisi">
+          <option value="">Pilih Ekspedisi</option>
+
+          <option v-for="e in pengirimanList" :value="e.nama">
+            {{ e.nama }}
+          </option>
+        </select>
+
+        <select v-model="form.paket">
+          <option value="">Pilih Paket</option>
+
+          <option v-for="p in paketList" :value="p.kode">
+            {{ p.kode }} - {{ p.nama }}
+          </option>
+        </select>
+
+        <p v-if="selectedPaket">Total: Rp {{ selectedPaket.harga }}</p>
+
+        <button @click="tambahDO">Tambah DO</button>
+
+        <hr />
+
+        <br />
+      </div>
+
+      <input type="text" v-model="nomorDO" placeholder="Masukkan Nomor DO" />
+
+      <button @click="cariDO">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        Cari
+      </button>
+
+      <br /><br />
+
+      <div v-if="hasil" class="tracking-card">
+        <h3>Detail Pengiriman</h3>
+
+        <p>
+          <b>Nama:</b>
+          {{ hasil.nama }}
+        </p>
+
+        <p>
+          <b>Status:</b>
+
+          <span class="status-badge"> {{ hasil.status }} </span>
+        </p>
+
+        <p>
+          <b>Ekspedisi:</b>
+          {{ hasil.ekspedisi }}
+        </p>
+
+        <p>
+          <b>Tanggal Kirim:</b>
+          {{ hasil.tanggalKirim }}
+        </p>
+
+        <p>
+          <b>Total:</b>
+          Rp {{ hasil.total }}
+        </p>
+
+        <h3>Riwayat Perjalanan</h3>
+
+        <ul class="timeline">
+          <li v-for="item in hasil.perjalanan">
+            <div class="timeline-dot"></div>
+
+            <span class="timeline-time"> {{ item.waktu }} </span>
+
+            <p class="timeline-text">{{ item.keterangan }}</p>
+          </li>
+        </ul>
+      </div>
+
+      <div v-else-if="sudahCari">
+        <p style="color: red">Data tidak ditemukan</p>
+      </div>
+
+      <br />
+
+      <a href="index.html" class="menu-btn"> Kembali </a>
+    </div>
+
+    <script src="js/dataBahanAjar.js"></script>
+    <script src="js/tracking-app.js"></script>
+  </body>
+</html>

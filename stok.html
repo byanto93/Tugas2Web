@@ -1,0 +1,162 @@
+<!Doctype html>
+<html>
+  <head>
+    <title>Stok Bahan Ajar</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+
+    <!-- Vue JS -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+
+  <body>
+    <div id="app" class="container">
+      <h1>
+        <i class="fa-solid fa-box"></i>
+        Stok Bahan Ajar
+      </h1>
+
+      <br />
+
+      <!-- FILTER -->
+      <h3>
+        <i class="fa-solid fa-filter"></i>
+        Filter Data
+      </h3>
+      <div class="filter-bar">
+        <select v-model="filterUpbjj">
+          <option value="">Semua UPBJJ</option>
+
+          <option v-for="u in upbjjList">{{ u }}</option>
+        </select>
+
+        <select v-if="filterUpbjj"
+        v-model="filterKategori">
+          <option value="">Semua Kategori</option>
+
+          <option v-for="k in kategoriList">{{ k }}</option>
+        </select>
+
+        <select v-model="sortBy">
+          <option value="">Urutkan Data</option>
+
+          <option value="judul">Judul</option>
+
+          <option value="qty">Stok</option>
+
+          <option value="harga">Harga</option>
+        </select>
+      </div>
+
+      <div class="filter-bottom">
+        <label>
+          <input type="checkbox" v-model="hanyaWarning" />
+
+          <i class="fa-solid fa-triangle-exclamation"></i>
+          Tampilkan stok warning
+        </label>
+
+        <button @click="resetFilter">Reset Filter</button>
+      </div>
+
+      <br />
+
+      <br /><br />
+
+      <!-- TOGGLE FORM -->
+      <button @click="showForm = !showForm">Tambah Data</button>
+
+      <br /><br />
+
+      <!-- FORM -->
+      <div v-if="showForm">
+        <input type="text" v-model="form.kode" placeholder="Kode" />
+
+        <input type="text" v-model="form.judul" placeholder="Judul" />
+
+        <select v-model="form.kategori">
+          <option value="">Pilih Kategori</option>
+
+          <option v-for="k in kategoriList">{{ k }}</option>
+        </select>
+
+        <select v-model="form.upbjj">
+          <option value="">Pilih UPBJJ</option>
+
+          <option v-for="u in upbjjList">{{ u }}</option>
+        </select>
+
+        <input type="text" v-model="form.lokasiRak" placeholder="Lokasi Rak" />
+
+        <input type="number" v-model="form.qty" placeholder="Qty" />
+
+        <input type="number" v-model="form.safety" placeholder="Safety Stock" />
+
+        <input type="number" v-model="form.harga" placeholder="Harga" />
+
+        <button @click="tambahData">Simpan Data</button>
+
+        <br /><br />
+      </div>
+
+      <!-- TABLE -->
+      <table border="1" width="100%">
+        <thead>
+          <tr>
+            <th>Kode</th>
+            <th>Judul</th>
+            <th>Kategori</th>
+            <th>UPBJJ</th>
+            <th>Qty</th>
+            <th>Status</th>
+            <th>Catatan</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr v-for="item in filteredStok" :key="item.kode">
+            <td>{{ item.kode }}</td>
+
+            <td>{{ item.judul }}</td>
+
+            <td>{{ item.kategori }}</td>
+
+            <td>{{ item.upbjj }}</td>
+
+            <td>{{ item.qty }}</td>
+
+            <!-- STATUS -->
+            <td>
+              <span v-if="item.qty <= 0" class="badge danger"> Kosong </span>
+
+              <span v-else-if="item.qty < item.safety" class="badge warning">
+                Menipis
+              </span>
+
+              <span v-else class="badge success"> Aman </span>
+            </td>
+
+            <!-- CATATAN -->
+            <td v-html="item.catatanHTML"></td>
+
+            <td>
+              <button @click="editData(item)">Edit</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <br />
+
+      <a href="index.html" class="menu-btn"> Kembali </a>
+    </div>
+
+    <script src="js/dataBahanAjar.js"></script>
+    <script src="js/stok-app.js"></script>
+  </body>
+</html>
